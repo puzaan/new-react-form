@@ -43,11 +43,19 @@ const addForm = (req,res) => {
         
 
     })
-    //for single file
-    if(req.file){
-        form.avatar = req.files.path,
-        form.photo = req.file.path      
+
+
+    if(req.files){
+        form.avatar=req.files.avatar[0].originalname;
+        form.photo=req.files.photo[0].originalname;
+
     }
+    
+    //for single file
+    // if(req.file){
+    //     form.avatar = req.file.path
+            
+    // }
 
     // for multipal file
 
@@ -82,11 +90,16 @@ const update = asyncHandler(async(req, res)=>{
         form.name = req.body.name || form.name;
         form.email = req.body.email || form.email;
         form.contactNo = req.body.contactNo || form.contactNo;
-
+        
+        if(req.files){
+            form.avatar = req.files.avatar[0].originalname || form.avatar;
+            form.photo = req.files.photo[0].originalname || form.photo;
+        }
 
         const updatedForm = await form.save();
         res.status(201);
         res.json({
+            form,
             message: 'Form Updated'
         })
     }else{
